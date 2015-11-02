@@ -1,0 +1,83 @@
+#!/bin/bash
+
+#       Title:   Project Make
+#      Author:   T Flynn
+#        Date:   2015-10-01
+# Description:   Creates blank directory tree, Makefile,         
+#    documentation &/or source(s) for a new programming project. 
+
+
+initialiseUserInputs() projectTitle language directory;
+
+
+function initialiseUserInputs()
+{
+if [ ! -n "$1" ]
+then 
+  if [ ! -n "$2"]
+  echo "usage: projectMake [project title] [language] option -[directory]."
+  exit 127   
+else 
+ projectName=$1
+ language=$2
+}
+
+function 
+# set directory top-level based on option | !option
+if [ -n "$3" ] && [ -d "$3" ]
+then
+  directory=$2
+elif [ -n "$3" ] && [ ! -d "$3" ]
+then
+  echo "Directory ' $3 ' invalid, please enter a valid directory"
+  exit 127
+else
+  directory=`pwd` #use current directory 
+fi
+echo -e "\n~~~*>New Project<*~~~ \nTitle: $projectName"
+echo "Location:" $directory
+
+# create project directory structure
+cd $directory
+mkdir $projectName
+cd $projectName
+mkdir bin build doc include lib scratch src tests
+
+# move and configure project Makefile
+cp /home/tom/Desktop/templateMAKE ./Makefile
+
+
+# setup source file(s) from template
+
+# create readme
+# vi readme
+
+# Prompt to setup repository
+echo -e "Inititalise a repository? All source files included by default\n y/n"
+
+inputValid=0
+
+while [ $inputValid != 1 ]
+do
+  read startGit
+  if [ $startGit == "y" ]
+  then 
+    echo "initialising repository..."
+    inputValid=1
+    git init --all 
+    
+  elif [ $startGit == "n" ]
+  then 
+    echo -e "no repo \n"
+    inputValid=1;
+
+  else
+    echo -e "Enter y/n only"
+    inputValid=0
+  fi
+done
+
+# finished, show resulting project structure & files
+tree
+echo -e "Project ' $projectName ' creation is complete.\n"
+exit 0

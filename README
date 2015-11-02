@@ -1,0 +1,44 @@
+0.1)About:
+projectMake is a collection of scripts and text files used to automatically generate project directories and source files with necessary make files etc. 
+
+Called from the shell using projectMake
+
+0.1.1)Files:
+-projectMake.sh
+  --projectMaker.sh
+    ---sourceMaker.sh
+-TEMPLATEmake
+-source.cpp
+-source.hpp
+
+0.2)To Do:
+- Repository for projectMaker
+	This will include the top level script, TEMPLATEmake and 	 any other associated files.
+- Port projectMAKER into a function-based script
+	Currently the script is one long chain of commands, these 		need to be encapsulated into functions to improve the flow 		of execution and modularity
+- Work on the TEMPLATEmake
+	The main challenge with this will be writing a function to  		reproduce a general 'recipie' for specific source files 	dependent on the project. 
+	ie. have a 'blank' makefile that essentially does nothing,  		then the script can set variables to populate each recipe
+- Work on the barebonesSource.cpp & .h
+
+1.0)Functional Description of projectMaker.sh:
+***Specify 1 of 2 modes SOURCE FILE or PROJECT***
+\___SOURCE FILE
+  -> user specifies title, language and optionally, a directory
+  -> script navigates to specified directory, creates folder     structure
+  -> script configures the barebones makefile (see 1.2 for details)
+  -> script creates the barebones sourcefile(s)
+  -> user specifies y/n for a git repo to be configured
+  -> tree is used to show resulting project directory
+       \
+	\___PROJECT
+	-> user inputs name of source file(s) to be created from 		the template
+	-> script creates the source file(s) from template
+
+1.1)Structural Description of projectMaker.sh:
+***Each step from 1.0 is compartmentalised into a set of functions linked by minimal commands***
+
+1.2)Functional Description of TEMPLATEmake
+***Initially for cpp-based compilation***
+-> 
+
