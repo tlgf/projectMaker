@@ -19,11 +19,11 @@ Called from the shell using projectMake
 - Work on the TEMPLATEmake
 	The main challenge with this will be writing a function to  		reproduce a general 'recipie' for specific source files 	dependent on the project. 
 	ie. have a 'blank' makefile that essentially does nothing,  		then the script can set variables to populate each recipe
-- Work on the barebonesSource.cpp & .h
+- Work on the barebonesSource.cpp & .hpp
 
 1.0)Functional Description of projectMaker.sh:
-***Specify 1 of 2 modes SOURCE FILE or PROJECT***
-\___SOURCE FILE
+***Specify 1 of 2 modes PROJECT or SOURCE FILE***
+\___PROJECT
   -> user specifies title, language and optionally, a directory
   -> script navigates to specified directory, creates folder     structure
   -> script configures the barebones makefile (see 1.2 for details)
@@ -31,7 +31,7 @@ Called from the shell using projectMake
   -> user specifies y/n for a git repo to be configured
   -> tree is used to show resulting project directory
        \
-	\___PROJECT
+	\___SOURCE FILE
 	-> user inputs name of source file(s) to be created from 		the template
 	-> script creates the source file(s) from template
 

@@ -1,61 +1,94 @@
 #!/bin/bash
-
+#************************************#
 #       Title:   Project Make
 #      Author:   T Flynn
-#        Date:   2015-10-01
+#        Date:   2015-10-01 (created)
 # Description:   Creates blank directory tree, Makefile,         
 #    documentation &/or source(s) for a new programming project. 
+#************************************#
 
+# GLOBAL VARIABLES#
 
-initialiseUserInputs() projectTitle language directory;
+# passed in at script execution
+PROJECT_NAME=$1
+PROJECT_LANGUAGE=$2
+PROJECT_DIRECTORY=$3
 
+# globally configured constants
+# TEMPLATE_DIRECTORY=
+# TEMPLATE_CPP=
+# TEMPLATE_HPP=
+# TEMPLATE_C=
+# TEMPLATE_H=
+# TEMPLATE_PY=
 
-function initialiseUserInputs()
+#~~~FUNCTION DECLARATIONS~~~#
+
+# pass in name & language
+function initialiseUserInputs ()
 {
-if [ ! -n "$1" ]
+local name=$1
+local lang=$2
+
+if [ ! -n "$name" ]
 then 
-  if [ ! -n "$2"]
-  echo "usage: projectMake [project title] [language] option -[directory]."
-  exit 127   
-else 
- projectName=$1
- language=$2
+  if [ ! -n "$lang" ]
+  then
+    echo "usage: projectMake [project title] [language] option -[directory]."
+    exit 127 
+  fi
+fi
 }
 
-function 
-# set directory top-level based on option | !option
-if [ -n "$3" ] && [ -d "$3" ]
-then
-  directory=$2
-elif [ -n "$3" ] && [ ! -d "$3" ]
-then
-  echo "Directory ' $3 ' invalid, please enter a valid directory"
-  exit 127
-else
-  directory=`pwd` #use current directory 
-fi
-echo -e "\n~~~*>New Project<*~~~ \nTitle: $projectName"
-echo "Location:" $directory
+# pass in name, directory
+function buildDirectories ()
+{
+local name=$1
+local directory=$2
 
-# create project directory structure
-cd $directory
-mkdir $projectName
-cd $projectName
-mkdir bin build doc include lib scratch src tests
+  # set directory top-level based on option | !option
+  if [ -n "$name" ] && [ -d "$directory" ]
+    then
+      directory=$2
+  elif [ -n "$name" ] && [ ! -d "$directory" ]
+    then
+      echo "Directory ' $directory ' invalid, please enter a valid directory"
+    exit 127
+  else
+    directory=`pwd` #use current directory 
+  fi
+  echo -e "\n~~~*>New Project<*~~~ \nTitle: $name"
+  echo -e "\nLanguage: $PROJECT_LANGUAGE"
+  echo "Location:" $directory
 
+  # create project directory structure
+  cd $directory
+  mkdir $name
+  cd $name
+  mkdir bin build doc include lib scratch src tests
+}
+
+function makeFileCreateConfigure ()
+{
+echo "makefileCreateConfigure"
 # move and configure project Makefile
-cp /home/tom/Desktop/templateMAKE ./Makefile
+# cp /home/tom/Desktop/templateMAKE ./Makefile
+}
 
-
+function sourceFilesCreateConfigure ()
+{
 # setup source file(s) from template
-
+echo "sourceFilesCreateConfigure"
 # create readme
 # vi readme
+}
 
+function startGit ()
+{
 # Prompt to setup repository
 echo -e "Inititalise a repository? All source files included by default\n y/n"
 
-inputValid=0
+local inputValid=0
 
 while [ $inputValid != 1 ]
 do
@@ -76,8 +109,20 @@ do
     inputValid=0
   fi
 done
+}
 
+function finaliseProjectCreation ()
+{
 # finished, show resulting project structure & files
 tree
 echo -e "Project ' $projectName ' creation is complete.\n"
 exit 0
+}
+
+#~~~SCRIPT EXECUTION~~~#
+initialiseUserInputs $PROJECT_NAME $PROJECT_LANGUAGE
+buildDirectories $PROJECT_NAME $PROJECT_DIRECTORY
+makeFileCreateConfigure
+sourceFilesCreateConfigure
+startGit
+finaliseProjectCreation
