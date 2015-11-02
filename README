@@ -5,21 +5,22 @@ Called from the shell using projectMake
 
 0.1.1)Files:
 -projectMake.sh
-  --projectMaker.sh
-    ---sourceMaker.sh
+  --project.sh
+    ---source.sh
 -TEMPLATEmake
 -source.cpp
 -source.hpp
 
 0.2)To Do:
 - Repository for projectMaker
-	This will include the top level script, TEMPLATEmake and 	 any other associated files.
+	This will include the top level script, TEMPLATEmake and any other associated files.
 - Port projectMAKER into a function-based script
-	Currently the script is one long chain of commands, these 		need to be encapsulated into functions to improve the flow 		of execution and modularity
+	Currently the script is one long chain of commands, these need to be encapsulated into functions to improve the flow of execution and modularity
 - Work on the TEMPLATEmake
-	The main challenge with this will be writing a function to  		reproduce a general 'recipie' for specific source files 	dependent on the project. 
-	ie. have a 'blank' makefile that essentially does nothing,  		then the script can set variables to populate each recipe
+	The main challenge with this will be writing a function to reproduce a general 'recipie' for specific source files dependent on the project. 
+	ie. have a 'blank' makefile that does nothing, then the script can set variables to populate each recipe
 - Work on the barebonesSource.cpp & .hpp
+	These will be used for both C and CPP projects. 
 
 1.0)Functional Description of projectMaker.sh:
 ***Specify 1 of 2 modes PROJECT or SOURCE FILE***
@@ -32,7 +33,7 @@ Called from the shell using projectMake
   -> tree is used to show resulting project directory
        \
 	\___SOURCE FILE
-	-> user inputs name of source file(s) to be created from 		the template
+	-> user inputs name of source file(s) to be created from the template
 	-> script creates the source file(s) from template
 
 1.1)Structural Description of projectMaker.sh:
@@ -40,5 +41,7 @@ Called from the shell using projectMake
 
 1.2)Functional Description of TEMPLATEmake
 ***Initially for cpp-based compilation***
--> 
+->
+
+1.3)Functional Description of  
 
