@@ -10,9 +10,9 @@
 # GLOBAL VARIABLES#
 
 # passed in at script execution
-PROJECT_NAME=$1
-PROJECT_LANGUAGE=$2
-PROJECT_DIRECTORY=$3
+PROJECT_NAME=$1       #[project title]
+PROJECT_LANGUAGE=$2   #[language]
+PROJECT_DIRECTORY=$3  #-[directory]
 
 # globally configured constants
 # TEMPLATE_DIRECTORY=
