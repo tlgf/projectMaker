@@ -12,15 +12,12 @@ Called from the shell using projectMake
 -source.hpp
 
 0.2)To Do:
-- Repository for projectMaker
-	This will include the top level script, TEMPLATEmake and any other associated files.
-- Port projectMAKER into a function-based script
-	Currently the script is one long chain of commands, these need to be encapsulated into functions to improve the flow of execution and modularity
 - Work on the TEMPLATEmake
-	The main challenge with this will be writing a function to reproduce a general 'recipie' for specific source files dependent on the project. 
+	Begin by only populating the comment titleblock fields. The recipes are then filled out manually. This can then be extended for automation based on source files etc. 
 	ie. have a 'blank' makefile that does nothing, then the script can set variables to populate each recipe
 - Work on the barebonesSource.cpp & .hpp
-	These will be used for both C and CPP projects. 
+	These will be used for both C and CPP projects. Have some libraries included by default. Begin with the same principle as the blank makefile - just populate the title block. 
+- Expand the functionality for creating projects in other languages... IE python 
 
 1.0)Functional Description of projectMaker.sh:
 ***Specify 1 of 2 modes PROJECT or SOURCE FILE***
