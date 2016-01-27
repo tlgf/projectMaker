@@ -7,7 +7,7 @@
 #    documentation &/or source(s) for a new programming project. 
 #************************************#
 
-# GLOBAL VARIABLES#
+# GLOBAL VARIABLES #
 
 # passed in at script execution
 PROJECT_NAME=$1       #[project title]
@@ -15,13 +15,15 @@ PROJECT_LANGUAGE=$2   #[language]
 PROJECT_DIRECTORY=$3  #-[directory]
 
 # globally configured constants
+THE_DATE=$(date +"%Y.%m.%d")
 # TEMPLATE_DIRECTORY=
-# TEMPLATE_CPP=
+TEMPLATE_CPP="/home/tom/Documents/projectMaker/projectTemplates/c-cpp"
 # TEMPLATE_H=
 # TEMPLATE_PY=
 
 #~~~FUNCTION DECLARATIONS~~~#
 
+#-------------------------------------------------------------
 # pass in name & language
 function initialiseUserInputs ()
 {
@@ -38,6 +40,7 @@ then
 fi
 }
 
+#-------------------------------------------------------------
 # pass in name, directory
 function buildDirectories ()
 {
@@ -55,32 +58,68 @@ local directory=$2
   else
     directory=`pwd` #use current directory 
   fi
-  echo -e "\n~~~*>New Project<*~~~ \nTitle: $name"
-  echo -e "\nLanguage: $PROJECT_LANGUAGE"
+  echo -e "\n     ~~~*>New Project<*~~~ \nTitle: $name"
+  echo -e "Language: $PROJECT_LANGUAGE"
   echo "Location:" $directory
 
   # create project directory structure
   cd $directory
   mkdir $name
   cd $name
-  mkdir bin build doc include lib scratch src tests
+  mkdir bin doc scratch src tests
 }
 
+#-------------------------------------------------------------
 function makeFileCreateConfigure ()
 {
-echo "makefileCreateConfigure"
+#pwd
+local makeFileTemplate=$1"/TemplateForMake"
+# echo -e "makefile template dir:" $makeFileTemplate "\n"
+echo "Writing makefile..."
 # move and configure project Makefile
-# cp /home/tom/Desktop/templateMAKE ./Makefile
+cp $makeFileTemplate "./makefile"
+sed -i "s/theDate/$THE_DATE/" "makefile"
+sed -i "s/projectName/$PROJECT_NAME/" "makefile"
+echo "... Completed"
 }
 
-function sourceFilesCreateConfigure ()
+#-------------------------------------------------------------
+function CPP_sourceFilesCreateConfigure ()
 {
 # setup source file(s) from template
-echo "sourceFilesCreateConfigure"
-# create readme
-# vi readme
+local int numOfSrcs=0 
+local fileName
+local fileDesc
+local cppHeader=$1"/hppTemplate.hpp"
+local cppSource=$1"/cppTemplate.cpp"
+
+read -p "Enter Number of Sources: " numOfSrcs
+cd src
+
+for (( srcNum=1; srcNum<=$numOfSrcs; srcNum++ ))
+do
+    echo -e "Source Number $srcNum \n"
+    read -p "Enter a file name: " fileName
+    read -p "Enter a breif description: " fileDesc
+    echo -e $fileDesc
+    fileHeader="$fileName.hpp"
+    fileSource="$fileName.cpp"
+    # move from template directory
+    cp $cppHeader "./$fileHeader"
+    cp $cppSource "./$fileSource"
+    # populate title info
+    sed -i "s/sourceFileName/$fileName/" $fileHeader
+    sed -i "s/theDate/$THE_DATE/" $fileHeader
+    sed -i "s/desc/$fileDesc/" $fileHeader
+    sed -i "s/sourceFileName/$fileName/" $fileSource    
+    sed -i "s/theDate/$THE_DATE/" $fileSource
+    sed -i "s/desc/$fileDesc/" $fileSource
+done
+echo -e "Project Files: \n" ls
+cd ..
 }
 
+#-------------------------------------------------------------
 function startGit ()
 {
 # Prompt to setup repository
@@ -95,7 +134,8 @@ do
   then 
     echo "initialising repository..."
     inputValid=1
-    git init --all 
+    git init 
+    git add ./README ./src/*
     
   elif [ $startGit == "n" ]
   then 
@@ -109,18 +149,30 @@ do
 done
 }
 
+#-------------------------------------------------------------
 function finaliseProjectCreation ()
 {
+# create readme
+emacs -nw README
+
 # finished, show resulting project structure & files
 tree
-echo -e "Project ' $projectName ' creation is complete.\n"
+echo -e "Project ' $PROJECT_NAME ' creation is complete.\n"
 exit 0
 }
+#-------------------------------------------------------------
 
-#~~~SCRIPT EXECUTION~~~#
+            #~~~SCRIPT EXECUTION~~~#
+
 initialiseUserInputs $PROJECT_NAME $PROJECT_LANGUAGE
+
 buildDirectories $PROJECT_NAME $PROJECT_DIRECTORY
-makeFileCreateConfigure
-sourceFilesCreateConfigure
+
+#currently the script only supports CPP projects
+CPP_sourceFilesCreateConfigure $TEMPLATE_CPP
+
+makeFileCreateConfigure $TEMPLATE_CPP
+
 startGit
+
 finaliseProjectCreation

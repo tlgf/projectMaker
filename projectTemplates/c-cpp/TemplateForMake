@@ -1,0 +1,10 @@
+#!/usr/bin/make -f
+
+#************************************#
+#       Title:  makefile
+#      Author:  T Flynn
+#        Date:  theDate
+# Description:  makefile for the project projectName 
+#************************************#
+
+

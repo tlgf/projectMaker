@@ -26,6 +26,7 @@ Called from the shell using projectMake
   -> script navigates to specified directory, creates folder     structure
   -> script configures the barebones makefile (see 1.2 for details)
   -> script creates the barebones sourcefile(s)
+  -> script prompts user to write brief README.md file
   -> user specifies y/n for a git repo to be configured
   -> tree is used to show resulting project directory
        \
