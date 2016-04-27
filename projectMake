@@ -27,138 +27,138 @@ TEMPLATE_CPP="/home/tom/Documents/projectMaker/projectTemplates/c-cpp"
 # pass in name & language
 function initialiseUserInputs ()
 {
-local name=$1
-local lang=$2
+    local name=$1
+    local lang=$2
 
-if [ ! -n "$name" ]
-then 
-  if [ ! -n "$lang" ]
-  then
-    echo "usage: projectMake [project title] [language] option -[directory]."
-    exit 127 
-  fi
-fi
+    if [ ! -n "$name" ]
+    then 
+	if [ ! -n "$lang" ]
+	then
+	    echo "usage: projectMake [project title] [language] option -[directory]."
+	    exit 127 
+	fi
+    fi
 }
 
 #-------------------------------------------------------------
 # pass in name, directory
 function buildDirectories ()
 {
-local name=$1
-local directory=$2
+    local name=$1
+    local directory=$2
 
-  # set directory top-level based on option | !option
-  if [ -n "$name" ] && [ -d "$directory" ]
+    # set directory top-level based on option | !option
+    if [ -n "$name" ] && [ -d "$directory" ]
     then
-      directory=$2
-  elif [ -n "$name" ] && [ ! -d "$directory" ]
+	directory=$2
+    elif [ -n "$name" ] && [ ! -d "$directory" ]
     then
-      echo "Directory ' $directory ' invalid, please enter a valid directory"
-    exit 127
-  else
-    directory=`pwd` #use current directory 
-  fi
-  echo -e "\n     ~~~*>New Project<*~~~ \nTitle: $name"
-  echo -e "Language: $PROJECT_LANGUAGE"
-  echo "Location:" $directory
+	echo "Directory ' $directory ' invalid, please enter a valid directory"
+	exit 127
+    else
+	directory=`pwd` #use current directory 
+    fi
+    echo -e "\n     ~~~*>New Project<*~~~ \nTitle: $name"
+    echo -e "Language: $PROJECT_LANGUAGE"
+    echo "Location:" $directory
 
-  # create project directory structure
-  cd $directory
-  mkdir $name
-  cd $name
-  mkdir bin doc scratch src tests
+    # create project directory structure
+    cd $directory
+    mkdir $name
+    cd $name
+    mkdir bin doc scratch src tests
 }
 
 #-------------------------------------------------------------
 function makeFileCreateConfigure ()
 {
-#pwd
-local makeFileTemplate=$1"/TemplateForMake"
-# echo -e "makefile template dir:" $makeFileTemplate "\n"
-echo "Writing makefile..."
-# move and configure project Makefile
-cp $makeFileTemplate "./makefile"
-sed -i "s/theDate/$THE_DATE/" "makefile"
-sed -i "s/projectName/$PROJECT_NAME/" "makefile"
-echo "... Completed"
+    #pwd
+    local makeFileTemplate=$1"/TemplateForMake"
+    # echo -e "makefile template dir:" $makeFileTemplate "\n"
+    echo "Writing makefile..."
+    # move and configure project Makefile
+    cp $makeFileTemplate "./makefile"
+    sed -i "s/theDate/$THE_DATE/" "makefile"
+    sed -i "s/projectName/$PROJECT_NAME/" "makefile"
+    echo "... Completed"
 }
 
 #-------------------------------------------------------------
 function CPP_sourceFilesCreateConfigure ()
 {
-# setup source file(s) from template
-local int numOfSrcs=0 
-local fileName
-local fileDesc
-local cppHeader=$1"/hppTemplate.hpp"
-local cppSource=$1"/cppTemplate.cpp"
+    # setup source file(s) from template
+    local int numOfSrcs=0 
+    local fileName
+    local fileDesc
+    local cppHeader=$1"/hppTemplate.hpp"
+    local cppSource=$1"/cppTemplate.cpp"
 
-read -p "Enter Number of Sources: " numOfSrcs
-cd src
+    read -p "Enter Number of Sources: " numOfSrcs
+    cd src
 
-for (( srcNum=1; srcNum<=$numOfSrcs; srcNum++ ))
-do
-    echo -e "Source Number $srcNum \n"
-    read -p "Enter a file name: " fileName
-    read -p "Enter a breif description: " fileDesc
-    echo -e $fileDesc
-    fileHeader="$fileName.hpp"
-    fileSource="$fileName.cpp"
-    # move from template directory
-    cp $cppHeader "./$fileHeader"
-    cp $cppSource "./$fileSource"
-    # populate title info
-    sed -i "s/sourceFileName/$fileName/" $fileHeader
-    sed -i "s/theDate/$THE_DATE/" $fileHeader
-    sed -i "s/desc/$fileDesc/" $fileHeader
-    sed -i "s/sourceFileName/$fileName/" $fileSource    
-    sed -i "s/theDate/$THE_DATE/" $fileSource
-    sed -i "s/desc/$fileDesc/" $fileSource
-done
-echo -e "Project Files: \n" ls
-cd ..
+    for (( srcNum=1; srcNum<=$numOfSrcs; srcNum++ ))
+    do
+	echo -e "Source Number $srcNum \n"
+	read -p "Enter a file name: " fileName
+	read -p "Enter a breif description: " fileDesc
+	echo -e $fileDesc
+	fileHeader="$fileName.hpp"
+	fileSource="$fileName.cpp"
+	# move from template directory
+	cp $cppHeader "./$fileHeader"
+	cp $cppSource "./$fileSource"
+	# populate title info
+	sed -i "s/sourceFileName/$fileName/" $fileHeader
+	sed -i "s/theDate/$THE_DATE/" $fileHeader
+	sed -i "s/desc/$fileDesc/" $fileHeader
+	sed -i "s/sourceFileName/$fileName/" $fileSource    
+	sed -i "s/theDate/$THE_DATE/" $fileSource
+	sed -i "s/desc/$fileDesc/" $fileSource
+    done
+    echo -e "Project Files: \n" ls
+    cd ..
 }
 
 #-------------------------------------------------------------
 function startGit ()
 {
-# Prompt to setup repository
-echo -e "Inititalise a repository? All source files included by default\n y/n"
+    # Prompt to setup repository
+    echo -e "Inititalise a repository? All source files included by default\n y/n"
 
-local inputValid=0
+    local inputValid=0
 
-while [ $inputValid != 1 ]
-do
-  read startGit
-  if [ $startGit == "y" ]
-  then 
-    echo "initialising repository..."
-    inputValid=1
-    git init 
-    git add ./README ./src/*
-    
-  elif [ $startGit == "n" ]
-  then 
-    echo -e "no repo \n"
-    inputValid=1;
+    while [ $inputValid != 1 ]
+    do
+	read startGit
+	if [ $startGit == "y" ]
+	then 
+	    echo "initialising repository..."
+	    inputValid=1
+	    git init 
+	    git add ./README ./src/*
+	    
+	elif [ $startGit == "n" ]
+	then 
+	    echo -e "no repo \n"
+	    inputValid=1;
 
-  else
-    echo -e "Enter y/n only"
-    inputValid=0
-  fi
-done
+	else
+	    echo -e "Enter y/n only"
+	    inputValid=0
+	fi
+    done
 }
 
 #-------------------------------------------------------------
 function finaliseProjectCreation ()
 {
-# create readme
-emacs -nw README
+    # create readme
+    emacs -nw README
 
-# finished, show resulting project structure & files
-tree
-echo -e "Project ' $PROJECT_NAME ' creation is complete.\n"
-exit 0
+    # finished, show resulting project structure & files
+    tree
+    echo -e "Project ' $PROJECT_NAME ' creation is complete.\n"
+    exit 0
 }
 #-------------------------------------------------------------
 
